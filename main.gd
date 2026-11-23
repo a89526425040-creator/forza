@@ -80,6 +80,12 @@ func _build_car() -> void:
     car.name = "BMW_M4_Blockout"
     car.position = Vector3(0, 0.65, -8)
     add_child(car)
+    var car_collision := CollisionShape3D.new()
+    var car_shape := BoxShape3D.new()
+    car_shape.size = Vector3(1.85, 0.85, 3.9)
+    car_collision.shape = car_shape
+    car_collision.position = Vector3(0, 0.18, 0)
+    car.add_child(car_collision)
     _car_box("Body", Vector3(0, 0.15, 0), Vector3(2.05, 0.55, 4.35), Color(0.04, 0.20, 0.62))
     _car_box("Cabin", Vector3(0, 0.72, 0.25), Vector3(1.62, 0.72, 1.95), Color(0.035, 0.07, 0.10))
     _car_box("Hood", Vector3(0, 0.40, -1.35), Vector3(1.9, 0.16, 1.15), Color(0.05, 0.24, 0.72))
