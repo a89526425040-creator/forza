@@ -1,0 +1,29 @@
+name: Open Horizon Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Prepare export
+        run: |
+          mkdir -p build
+          mkdir -p ~/.config/godot
+          godot --version
+      - name: Export Android APK
+        run: |
+          godot --headless --verbose --export-debug "Android" build/OpenHorizon.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Open-Horizon-Android
+          path: build/OpenHorizon.apk
+          if-no-files-found: error
