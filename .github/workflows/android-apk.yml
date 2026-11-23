@@ -12,17 +12,33 @@ jobs:
       image: barichello/godot-ci:4.4.1
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Prepare export
+        uses: actions/checkout@v5
+
+      - name: Prepare Godot Android export environment
         run: |
-          mkdir -p build
-          mkdir -p ~/.config/godot
+          set -euo pipefail
+          mkdir -p "$HOME/.config/godot"
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          # The godot-ci image installs its Android SDK, JDK, signing key,
+          # editor settings and export templates under /root. GitHub Actions
+          # runs Godot with HOME=/github/home, so copy them into that HOME.
+          cp -a /root/.config/godot/. "$HOME/.config/godot/"
+          cp -a /root/.local/share/godot/export_templates/4.4.1.stable "$HOME/.local/share/godot/export_templates/"
+          test -f /root/debug.keystore
+          test -f "$HOME/.local/share/godot/export_templates/4.4.1.stable/android_debug.apk"
           godot --version
+          java -version
+          ls -la "$HOME/.config/godot"
+          ls -la "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+
       - name: Export Android APK
         run: |
+          set -euo pipefail
+          mkdir -p build
           godot --headless --verbose --export-debug "Android" build/OpenHorizon.apk
+
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Open-Horizon-Android
           path: build/OpenHorizon.apk
