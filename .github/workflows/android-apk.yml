@@ -21,6 +21,13 @@ jobs:
           mkdir -p "$HOME/.config/godot"
           mkdir -p "$HOME/.local/share/godot/export_templates"
           cp -a /root/.config/godot/. "$HOME/.config/godot/"
+          echo "=== Install Godot 4.4 Android SDK requirements ==="
+          yes | /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/lib/android-sdk --licenses
+          /usr/lib/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=/usr/lib/android-sdk "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;23.2.8568313" "cmake;3.10.2"
+          cat >> "$HOME/.config/godot/editor_settings-4.4.tres" <<'EOF'
+          export/android/ndk_path = "/usr/lib/android-sdk/ndk/23.2.8568313"
+          export/android/cmake_path = "/usr/lib/android-sdk/cmake/3.10.2"
+          EOF
           cp -a /root/.local/share/godot/export_templates/4.4.1.stable "$HOME/.local/share/godot/export_templates/"
           test -f /root/debug.keystore
           test -f "$HOME/.local/share/godot/export_templates/4.4.1.stable/android_debug.apk"
