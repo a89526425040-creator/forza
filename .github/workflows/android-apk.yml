@@ -34,6 +34,14 @@ jobs:
           ls -la /usr/lib/android-sdk
           ls -la /usr/lib/android-sdk/build-tools || true
           ls -la /usr/lib/android-sdk/platforms || true
+          echo "=== Build tools files ==="
+          find /usr/lib/android-sdk/build-tools -maxdepth 2 -type f -printf "%p\n" | sort
+          echo "=== Platform SDK files ==="
+          find /usr/lib/android-sdk/platforms/android-33 -maxdepth 2 -type f -printf "%p\n" | sort | head -100
+          echo "=== SDK package metadata ==="
+          find /usr/lib/android-sdk -maxdepth 3 -name package.xml -o -name source.properties | sort
+          echo "=== Keystore validation ==="
+          keytool -list -keystore /root/debug.keystore -storepass android -alias androiddebugkey
           echo "=== Export templates ==="
           ls -la "$HOME/.local/share/godot/export_templates/4.4.1.stable"
           echo "=== Keystore ==="
