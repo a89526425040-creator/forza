@@ -26,8 +26,18 @@ jobs:
           test -f "$HOME/.local/share/godot/export_templates/4.4.1.stable/android_debug.apk"
           godot --version
           java -version
-          ls -la "$HOME/.config/godot"
+          echo "=== Godot config files ==="
+          find /root/.config/godot "$HOME/.config/godot" -maxdepth 3 -type f -print
+          echo "=== Android settings ==="
+          grep -RniE "android|sdk|keystore|jdk" /root/.config/godot "$HOME/.config/godot" || true
+          echo "=== Android SDK ==="
+          ls -la /usr/lib/android-sdk
+          ls -la /usr/lib/android-sdk/build-tools || true
+          ls -la /usr/lib/android-sdk/platforms || true
+          echo "=== Export templates ==="
           ls -la "$HOME/.local/share/godot/export_templates/4.4.1.stable"
+          echo "=== Keystore ==="
+          ls -l /root/debug.keystore
 
       - name: Export Android APK
         shell: bash
