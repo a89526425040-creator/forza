@@ -179,7 +179,7 @@ func _physics_process(delta: float) -> void:
     if throttle < 0.05 and braking < 0.05:
         speed = move_toward(speed, 0.0, 2.0 * delta)
     speed = clamp(speed, -12.0, 62.0)
-    var steer_factor := clamp(absf(speed) / 18.0, 0.12, 1.0)
+    var steer_factor: float = clampf(absf(speed) / 18.0, 0.12, 1.0)
     car.rotation.y -= steering * steer_factor * delta * (1.25 if speed >= 0.0 else -1.0)
     var forward := -car.global_basis.z
     car.velocity.x = forward.x * speed
